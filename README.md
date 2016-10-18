@@ -168,6 +168,27 @@ Much better... But, did you get any output in the `mosquitto_sub`? None. Try thi
 
 And now everything *should* work! ;)
 
+### TLS configuration
+
+You need to create a certificate authority and a server certificate by
+following
+the instructions [here](http://mosquitto.org/man/mosquitto-tls-7.html).
+We've
+already created an example CA and server server certificates in the
+`mqtt`
+folder to use for development using these commands:
+```
+openssl req -new -x509 -subj "/C=US/ST=Louisiana/L=New
+Orleans/O=Boundless Spatial/CN=Testing Certificate Authority" -days 365
+-extensions v3_ca -keyout ca.key -out ca.crt
+openssl genrsa -out server.key 2048
+$ openssl req -out server.csr -key server.key -new -subj
+"/C=US/ST=Louisiana/L=New Orleans/O=Boundless
+Spatial/CN=efc-dev.boundlessgeo.com"
+openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key
+-CAcreateserial -out server.crt -days 365
+```
+
 ## Contributors
 
 - See [contributors page](https://github.com/jllopis/docker-mosquitto/graphs/contributors) for a list of contributors.
