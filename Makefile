@@ -1,5 +1,5 @@
 DOCKER=docker
-REPOSITORY?=marcusthebrown/mosquitto
+REPOSITORY?=boundlessgeo/mosquitto
 TAG?=latest
 
 all:
