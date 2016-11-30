@@ -2,6 +2,7 @@ FROM alpine:3.4
 
 EXPOSE 1883
 EXPOSE 8883
+EXPOSE 8884
 EXPOSE 9883
 
 VOLUME ["/var/lib/mosquitto", "/etc/mosquitto", "/etc/mosquitto.d"]
@@ -45,9 +46,9 @@ RUN buildDeps='git alpine-sdk openssl-dev libwebsockets-dev c-ares-dev util-linu
     apk del $buildDeps && rm -rf /var/cache/apk/*
 
 ADD mosquitto.conf /etc/mosquitto/mosquitto.conf
-ADD ./mqtt/server.crt /etc/mosquitto/server.crt
-ADD ./mqtt/server.key /etc/mosquitto/server.key
-ADD ./mqtt/ca.crt /etc/mosquitto/ca.crt
+ADD ./tls/broker.crt /etc/mosquitto/broker.crt
+ADD ./tls/broker.key /etc/mosquitto/broker.key
+ADD ./tls/ca.crt /etc/mosquitto/ca.crt
 
 ENTRYPOINT ["/run.sh"]
 CMD ["mosquitto"]

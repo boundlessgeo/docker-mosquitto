@@ -174,19 +174,41 @@ You need to create a certificate authority and a server certificate by
 following
 the instructions [here](http://mosquitto.org/man/mosquitto-tls-7.html).
 We've
-already created an example CA and server server certificates in the
-`mqtt`
+already created an example CA and server certificates in the
+`tls`
 folder to use for development using these commands:
+
 ```
-openssl req -new -x509 -subj "/C=US/ST=Louisiana/L=New
-Orleans/O=Boundless Spatial/CN=Testing Certificate Authority" -days 365
--extensions v3_ca -keyout ca.key -out ca.crt
-openssl genrsa -out server.key 2048
-$ openssl req -out server.csr -key server.key -new -subj
-"/C=US/ST=Louisiana/L=New Orleans/O=Boundless
-Spatial/CN=efc-dev.boundlessgeo.com"
-openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key
--CAcreateserial -out server.crt -days 365
+# generate a new self signed certificate for our test CA
+openssl req -new -x509 \
+-subj "/C=US/ST=Louisiana/L=New Orleans/O=Boundless Spatial/CN=Test Certificate Authority" \
+-days 365 -extensions v3_ca -keyout ca.key -out ca.crt
+
+# generate a private RSA key for the broker
+openssl genrsa -out broker.key 2048
+
+# generate a certificate signing request (CSR) for the broker
+openssl req -new \
+-subj "/C=US/ST=Louisiana/L=New Orleans/O=Boundless Spatial/CN=efc-dev.boundlessgeo.com" \
+-out broker.csr -key broker.key
+
+# sign the broker's CSR using the test CA
+openssl x509 -req -in broker.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out broker.crt -days 365
+```
+
+To create client certificates used to authenticate to the broker:
+
+```
+# generate a private key for the client
+openssl genrsa -out client.key 2048
+
+# generate a CSR for the client
+openssl req -new \
+-subj "/CN=efc-backend-client/O=efc-dev.boundlessgeo.com" \
+-out client.csr -key client.key
+
+# sign the client's CSR using the test CA
+openssl x509 -req -in client.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out client.crt -days 365
 ```
 
 ## Contributors
