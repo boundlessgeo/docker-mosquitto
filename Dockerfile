@@ -44,6 +44,7 @@ RUN buildDeps='git alpine-sdk openssl-dev libwebsockets-dev c-ares-dev util-linu
     apk del $buildDeps && rm -rf /var/cache/apk/*
 
 ADD mosquitto.conf /etc/mosquitto/mosquitto.conf
+ADD acl.conf /etc/mosquitto/acl.conf
 ADD ./tls/broker.crt /etc/mosquitto/broker.crt
 ADD ./tls/broker.key /etc/mosquitto/broker.key
 ADD ./tls/ca.crt /etc/mosquitto/ca.crt
